@@ -61,6 +61,7 @@ func main() {
 	}
 
 	CreateCards()
+	CreateWeather()
 	fmt.Println("creted card deck")
 
 	// Wait here until CTRL-C or other term signal is received.
@@ -88,5 +89,22 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if m.Content == "/card" {
 		s.ChannelMessageSend(m.ChannelID, getRandomCard())
+	}
+
+	if m.Content == "/zima" {
+		s.ChannelMessageSend(m.ChannelID, GetWeatherReport("zima"))
+	}
+	if m.Content == "/wiosna" {
+		s.ChannelMessageSend(m.ChannelID, GetWeatherReport("wiosna"))
+	}
+	if m.Content == "/jesień" {
+		s.ChannelMessageSend(m.ChannelID, GetWeatherReport("jesień"))
+	}
+	if m.Content == "/lato" {
+		s.ChannelMessageSend(m.ChannelID, GetWeatherReport("lato"))
+	}
+
+	if m.Content == "/polowanie" {
+		s.ChannelMessageSend(m.ChannelID, GetAnimal())
 	}
 }
