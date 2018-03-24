@@ -15,33 +15,26 @@ import (
 // Variables used for command line parameters
 var (
 	Token string
-	Cards []string
+	Debug bool
 )
-
-func CreateCards() {
-	color := []string{"♥", "♦", "♠", "♣"}
-	value := []string{"9", "10", "J", "Q", "K", "A"}
-	for _, c := range color {
-		for _, v := range value {
-			Cards = append(Cards, fmt.Sprintf("%s %s", c, v))
-		}
-	}
-	Cards = append(Cards, "Czarny Joker")
-	Cards = append(Cards, "Czerwony Joker")
-}
-
-func getRandomCard() string {
-	return Cards[rand.Intn(len(Cards))]
-}
 
 func init() {
 
 	flag.StringVar(&Token, "t", "", "Bot Token")
+	flag.BoolVar(&Debug, "d", false, "Debug mode")
 	flag.Parse()
 }
 
 func main() {
 	rand.Seed(time.Now().Unix())
+
+	if Debug {
+		d := NewDeck()
+		for _, c := range *d {
+			fmt.Println(c.String(), "-->", c.suit, c.value)
+		}
+		return
+	}
 
 	// Create a new Discord session using the provided bot token.
 	dg, err := discordgo.New("Bot " + Token)
