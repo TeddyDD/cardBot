@@ -13,13 +13,11 @@ var cardSuit = map[int]string{
 }
 
 var cardValues = map[int]string{
-	1: "9",
-	2: "10",
-	3: "J",
-	4: "Q",
-	5: "K",
-	6: "A",
-	7: "JOKER",
+	11: "J",
+	12: "Q",
+	13: "K",
+	14: "A",
+	15: "JOKER",
 }
 
 // Card represents single card in poker deck
@@ -32,7 +30,7 @@ func (c Card) String() string {
 	color := []string{"♣", "♦", "♥", "♠"}
 	var colorSymbol string
 	// joker
-	if c.value == 7 {
+	if c.value == 15 {
 		if c.suit <= 2 { // 1-2
 			colorSymbol = "CZERWONY"
 		} else {
@@ -40,6 +38,9 @@ func (c Card) String() string {
 		}
 	} else { // 3-4
 		colorSymbol = fmt.Sprintf("%s", color[c.suit-1])
+	}
+	if c.value < 11 {
+		return fmt.Sprintf("%s %d", colorSymbol, c.value)
 	}
 	return fmt.Sprintf("%s %s", colorSymbol, cardValues[c.value])
 }
@@ -54,17 +55,17 @@ func NewCard(value int, color int) *Card {
 
 type Deck []Card
 
-//NewDeck generates slice with Poker deck
+//NewDeck generates slice with deck
 func NewDeck() *Deck {
 	d := new(Deck)
 	for c := 1; c < 5; c++ {
-		for v := 1; v < 7; v++ {
+		for v := 2; v < 15; v++ {
 			*d = append(*d, *NewCard(v, c))
 		}
 	}
 	*d = append(*d,
-		*NewCard(7, 2),
-		*NewCard(7, 3))
+		*NewCard(15, 2),
+		*NewCard(15, 3))
 	return d
 }
 
