@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"os"
 	"os/signal"
+	"sort"
 	"syscall"
 	"time"
 
@@ -30,6 +31,8 @@ func main() {
 
 	if Debug {
 		d := NewDeck()
+		d.Shuffle()
+		sort.Sort(ByValue(*d))
 		for _, c := range *d {
 			fmt.Println(c.String(), "-->", c.suit, c.value)
 		}
@@ -78,6 +81,17 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 	if m.Author.Bot == true {
 		return
+	}
+
+	// ping - pong
+	if m.Content == "/ping" {
+		if rand.Intn(50) == 42 {
+			s.ChannelMessageSend(m.ChannelID, "No ile można :/")
+			return
+		}
+		s.ChannelMessageSend(m.ChannelID, "pong")
+	} else if m.Content == "/pong" {
+		s.ChannelMessageSend(m.ChannelID, "ping")
 	}
 
 	if m.Content == "/card" {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 )
@@ -68,6 +69,30 @@ func NewDeck() *Deck {
 		*NewCard(15, 3))
 	return d
 }
+
+func (d Deck) IsEmpty() bool {
+	return len(d) == 0
+}
+
+func (d *Deck) MoveRandomCard(to *Deck) error {
+	if len(*d) == 0 {
+		return errors.New("Deck is empty")
+	}
+	cardId := rand.Intn(len(*d))
+	*to = append(*to, (*d)[cardId])
+	//TODO Remove card from d
+	return nil
+}
+
+// Shuffle deck
+func (d *Deck) Shuffle() {
+	for i := range *d {
+		j := rand.Intn(i + 1)
+		(*d)[i], (*d)[j] = (*d)[j], (*d)[i]
+	}
+}
+
+///////////////////////
 
 // CreateCards generates deck of Poker cards
 func CreateCards() {
