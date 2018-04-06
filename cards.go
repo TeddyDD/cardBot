@@ -74,13 +74,15 @@ func (d Deck) IsEmpty() bool {
 	return len(d) == 0
 }
 
+// MoveRandomCard from one deck to another
 func (d *Deck) MoveRandomCard(to *Deck) error {
 	if len(*d) == 0 {
 		return errors.New("Deck is empty")
 	}
 	cardId := rand.Intn(len(*d))
 	*to = append(*to, (*d)[cardId])
-	//TODO Remove card from d
+	*d = append((*d)[:cardId], (*d)[cardId+1:]...)
+
 	return nil
 }
 

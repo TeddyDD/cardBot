@@ -6,7 +6,6 @@ import (
 	"math/rand"
 	"os"
 	"os/signal"
-	"sort"
 	"syscall"
 	"time"
 
@@ -24,17 +23,29 @@ func init() {
 	flag.StringVar(&Token, "t", "", "Bot Token")
 	flag.BoolVar(&Debug, "d", false, "Debug mode")
 	flag.Parse()
+
 }
 
 func main() {
 	rand.Seed(time.Now().Unix())
 
 	if Debug {
-		d := NewDeck()
-		d.Shuffle()
-		sort.Sort(ByValue(*d))
-		for _, c := range *d {
-			fmt.Println(c.String(), "-->", c.suit, c.value)
+		//d := NewDeck()
+		//d.Shuffle()
+		//sort.Sort(ByValue(*d))
+		//for _, c := range *d {
+		//fmt.Println(c.String(), "-->", c.suit, c.value)
+		//}
+		c := NewCombat()
+		c.NewPlayer("ziutek")
+		c.NewPlayer("benek")
+		c.NewPlayer("waldek")
+		c.GiveCards()
+
+		fmt.Println("Inicjatywa")
+		init := c.GetInitiative()
+		for _, i := range *init {
+			fmt.Println(i)
 		}
 		return
 	}
