@@ -74,7 +74,7 @@ func (c *Combat) GetInitiative() (queue *[]string) {
 		// remove from players deck and return to combat deck
 		ret := &(*pDeck)[0]
 		*pDeck = append((*pDeck)[:0], (*pDeck)[1:]...)
-		*c.Rejected = append(*c.Deck, *ret)
+		*c.Rejected = append(*c.Rejected, *ret)
 		// shuffle combat deck just in case
 		c.Deck.Shuffle()
 	}

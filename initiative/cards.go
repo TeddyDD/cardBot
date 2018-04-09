@@ -76,13 +76,27 @@ func (d Deck) IsEmpty() bool {
 
 // MoveRandomCard from one deck to another
 func (d *Deck) MoveRandomCard(to *Deck) error {
+	//cardId := rand.Intn(len(*d))
+	l := len(*d)
+	var cardId int
+	if l == 0 {
+		return errors.New("Deck is empty")
+	}
+
+	cardId = rand.Intn(l)
+	return d.MoveCard(cardId, to)
+}
+
+// Move card with given index to other deck
+func (d *Deck) MoveCard(idx int, to *Deck) error {
 	if len(*d) == 0 {
 		return errors.New("Deck is empty")
 	}
-	cardId := rand.Intn(len(*d))
-	*to = append(*to, (*d)[cardId])
-	*d = append((*d)[:cardId], (*d)[cardId+1:]...)
-
+	if !(idx >= 0 && idx < len(*d)) {
+		return errors.New("Index out of bounds")
+	}
+	*to = append(*to, (*d)[idx])
+	*d = append((*d)[:idx], (*d)[idx+1:]...)
 	return nil
 }
 
