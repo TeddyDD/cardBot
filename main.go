@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/TeddyDD/cardBot/initiative"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -36,15 +37,20 @@ func main() {
 		//for _, c := range *d {
 		//fmt.Println(c.String(), "-->", c.suit, c.value)
 		//}
-		c := NewCombat()
+		c := initiative.NewCombat()
 		c.NewPlayer("ziutek")
 		c.NewPlayer("benek")
 		c.NewPlayer("waldek")
-		c.GiveCards()
-
-		fmt.Println("Inicjatywa")
-		init := c.GetInitiative()
-		for _, i := range *init {
+		for i := 0; i < 30; i++ {
+			c.GiveCards()
+			fmt.Println("Inicjatywa", i)
+			c.GetInitiative()
+		}
+		//for _, i := range *init {
+		//fmt.Println(i)
+		//}
+		fmt.Println("Combat deck")
+		for _, i := range *c.Deck {
 			fmt.Println(i)
 		}
 		return
@@ -66,10 +72,6 @@ func main() {
 		fmt.Println("error opening connection,", err)
 		return
 	}
-
-	CreateCards()
-	CreateWeather()
-	fmt.Println("creted card deck")
 
 	// Wait here until CTRL-C or other term signal is received.
 	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
@@ -105,9 +107,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "ping")
 	}
 
-	if m.Content == "/card" {
-		s.ChannelMessageSend(m.ChannelID, getRandomCard())
-	}
+	//if m.Content == "/card" {
+	//s.ChannelMessageSend(m.ChannelID, getRandomCard())
+	//}
 
 	if m.Content == "/zima" {
 		s.ChannelMessageSend(m.ChannelID, GetWeatherReport("zima"))

@@ -1,4 +1,4 @@
-package main
+package initiative
 
 import (
 	"errors"
@@ -56,7 +56,7 @@ func NewCard(value int, color int) *Card {
 
 type Deck []Card
 
-//NewDeck generates slice with deck
+//NewDeck generates slice with full deck of cards
 func NewDeck() *Deck {
 	d := new(Deck)
 	for c := 1; c < 5; c++ {
@@ -92,46 +92,4 @@ func (d *Deck) Shuffle() {
 		j := rand.Intn(i + 1)
 		(*d)[i], (*d)[j] = (*d)[j], (*d)[i]
 	}
-}
-
-///////////////////////
-
-// CreateCards generates deck of Poker cards
-func CreateCards() {
-	color := []string{"♣", "♦", "♥", "♠"}
-	value := []string{"9", "10", "J", "Q", "K", "A"}
-	for _, c := range color {
-		for _, v := range value {
-			Cards = append(Cards, fmt.Sprintf("%s %s", c, v))
-		}
-	}
-	Cards = append(Cards, "Czarny Joker")
-	Cards = append(Cards, "Czerwony Joker")
-}
-
-// Sorting
-
-// ByValue is sorted list of cards
-type ByValue []Card
-
-func (b ByValue) Len() int {
-	return len(b)
-}
-
-func (b ByValue) Swap(i, j int) {
-	b[i], b[j] = b[j], b[i]
-}
-
-func (b ByValue) Less(i, j int) bool {
-	if b[i].value == b[j].value {
-		return b[i].suit < b[j].suit
-	}
-	return b[i].value < b[j].value
-}
-
-// Cards is global deck for quick draws
-var Cards []string
-
-func getRandomCard() string {
-	return Cards[rand.Intn(len(Cards))]
 }

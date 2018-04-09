@@ -1,13 +1,9 @@
-package main
+package initiative
 
 import (
+	"fmt"
 	"sort"
 )
-
-import "fmt"
-
-// Player keeps data required to initiatives tests in
-// Savage Worlds
 
 type Combat struct {
 	Deck     *Deck
@@ -18,6 +14,7 @@ type Combat struct {
 func NewCombat() *Combat {
 	c := new(Combat)
 	c.Deck = NewDeck()
+	c.Rejected = &Deck{}
 	c.Players = make(map[string]*Deck)
 	return c
 }
@@ -27,15 +24,21 @@ func (c *Combat) NewPlayer(name string) {
 }
 
 func (c *Combat) GiveCards() {
-	for name, p := range c.Players {
-		c.Deck.MoveRandomCard(p)
-		if p.IsEmpty() {
-			fmt.Printf("%s wtf?", name)
+	for _, p := range c.Players {
+		if c.Deck.IsEmpty() {
+			c.Reshuffle()
+			fmt.Println("RESHUFFLE")
 		} else {
-			fmt.Printf("%s ma %s", name, p)
-			// TODO reshuffle
+			c.Deck.MoveRandomCard(p)
 		}
 	}
+}
+
+// Reshuffle cards from rejected deck
+func (c *Combat) Reshuffle() {
+	*c.Deck = append(*c.Deck, *c.Rejected...)
+	c.Rejected = &Deck{}
+	c.Deck.Shuffle()
 }
 
 type CardInfo struct {
@@ -63,20 +66,17 @@ func (b CardInfoByValue) Less(i, j int) bool {
 func (c *Combat) GetInitiative() (queue *[]string) {
 	var allCards []*CardInfo
 	for name, pDeck := range c.Players {
-		//for _, card := range *pDeck {
-		//ci := &CardInfo{
-		//Name: name,
-		//Card: &card,
-		//}
-		//allCards = append(allCards, ci)
-		//}
 		cInfo := &CardInfo{
 			Name: name,
 			Card: &(*pDeck)[0],
 		}
 		allCards = append(allCards, cInfo)
-		// remove from players deck
+		// remove from players deck and return to combat deck
+		ret := &(*pDeck)[0]
 		*pDeck = append((*pDeck)[:0], (*pDeck)[1:]...)
+		*c.Rejected = append(*c.Deck, *ret)
+		// shuffle combat deck just in case
+		c.Deck.Shuffle()
 	}
 	sort.Sort(sort.Reverse(CardInfoByValue(allCards)))
 	queue = new([]string)
