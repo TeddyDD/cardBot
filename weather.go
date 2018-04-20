@@ -44,7 +44,7 @@ func CreateWeather() {
 			"Drobny deszcz  🌧",
 			"Ulewa ⛈",
 			"Drobny śnieg 🌨",
-			"Śnierzyca ❄️",
+			"Śnieżyca ❄️",
 		},
 		"wiosna": {
 			"Słońce, bezchmurne niebo ☀️",
